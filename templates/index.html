@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../static/styles.css" />
+    <title>movie searcher</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js" integrity="sha512-LUKzDoJKOLqnxGWWIBM4lzRBlxcva2ZTztO8bTcWPmDSpkErWx0bSP4pdsjNH8kiHAUPaT06UXcb+vOEZH+HpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  </head>
+  <body>
+
+    <div class="header">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 offset-lg-2 text-center">
+            <div class="headerCaption">
+              <h1 onclick="window.location.reload()">電影搜尋引擎</h1>
+              <p>找出時下最熱門的電影、查看排名</p>
+            </div>
+            <div class="searchBar" id="searchBar">
+                <input
+                  type="search"
+                  name="searchInput"
+                  placeholder="輸入電影名稱或關鍵字"
+                  id="movieSearch"
+                />
+                <button onclick="searchTheMovie()">
+                  <ion-icon
+                    name="search-outline"
+                    class="bi bi-search"
+                  ></ion-icon>
+                </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="blank"></div>
+    <div id="underHead">
+      <div class="container">
+          <div class="row">
+              <div class="col-lg-8 offset-lg-2 text-center">
+                  <h1 id="contentCaption">本週排行榜！！！</h1>
+                  <p id="contentLittleCaption"></p>
+              </div>
+
+              <div class="col-lg-8 offset-lg-2" id="topMovieChart">
+
+
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">排名</th>
+                      <th scope="col">電影名稱</th>
+                      <th scope="col">上映日期</th>
+                      <th scope="col">網友滿意度</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    {% for movie in topMovieChart %}
+                    <tr>
+                      <th scope="row">{{ movie[0] }}</th>
+                      <td onclick="searchTheMovie(this.innerHTML)">{{ movie[1] }}</td>
+                      <td>{{ movie[2] }}</td>
+                      <td>{{ movie[3] }}</td>
+                    </tr>
+                    {% endfor %}
+                    
+                  </tbody>
+                </table>
+                
+
+
+              </div>
+
+              <div class="searchResult" id="searchResults"></div>
+
+              <div class="moreInfo" id="moreInfo">
+                <div class="card mb-3" style="max-width: 800px;">
+                  <div class="row g-0">
+                    <div class="col-md-4" id="whereToPlaceTheImg"></div>
+                    <div class="col-md-8">
+                      <div class="card-body">
+                        <h5 class="card-title" id="moreInfoMovieName">蟻人</h5>
+                        <p class="card-text" id="type">類型：動作、科幻</p>
+                        <p class="card-text" id="duration">類型：動作、科幻</p>
+                        <p class="card-text" id="date">類型：動作、科幻</p>
+                        <p class="card-text" id="director">類型：動作、科幻</p>
+                        <p class="card-text" id="imdbScore">類型：動作、科幻</p>
+                        <p class="card-text" id="company">類型：動作、科幻</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="story"><p id="story"></p></div>
+              <div class="blank"></div>
+
+              
+              
+
+
+          </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+        
+      var moreInfoBlock = document.getElementById("moreInfo");
+      moreInfoBlock.style.display = "none";
+
+          
+
+      function searchTheMovie(type=1)
+      {
+
+
+        let movieName = document.getElementById("movieSearch").value;
+
+        if(type != 1){
+          movieName = type;
+        }
+
+        axios({
+          url: "/",
+          method:"post",
+          data:{
+            action: "searchMovie",
+            movieName: movieName
+          },
+          responseType: "text/json",
+        })
+        .then(function(response){
+
+          
+          if(document.getElementById("moreInfo").style.display == 'flex'){
+            document.getElementById("moreInfo").style.display = 'none';
+          }
+          document.getElementById('story').innerHTML = '';
+
+          if(!!document.getElementById('movieImg')){
+            document.getElementById('movieImg').remove();
+          }
+
+          var responseData = JSON.parse(response.data)
+          console.log(responseData)
+
+          document.getElementById("contentCaption").innerHTML = "搜尋結果";
+          document.getElementById("contentLittleCaption").innerHTML = "共找到"+responseData.resultNum+"筆結果";
+          var movieChart = document.getElementById("topMovieChart");
+          movieChart.style.display = "none";
+
+          var searchResults = document.getElementById("searchResults");
+          searchResults.style.display = "flex";
+
+          //清空搜尋結果
+          searchResults.innerHTML = "";
+
+          //創建div和h3
+          for(j = 0; j < responseData.resultNum; j++){
+            var newResultBox = document.createElement('button');
+            newResultBox.className = "resultBox";
+            newResultBox.id = "resultBox" + (j+1);
+
+            newResultBox.setAttribute("onclick", "moreInfo(this)")
+
+
+            searchResults.appendChild(newResultBox)
+            var newResult = document.createElement('h3');
+            var newResultNum = document.createElement('h3');
+            newResult.id = "result" + (j+1);
+            newResultNum.id = "resultNum" + (j+1);
+            newResultBox.appendChild(newResultNum);
+            newResultBox.appendChild(newResult);
+            newResultNum.innerHTML = (j+1) + "."
+            newResult.innerHTML = responseData.resultList[j];
+          }
+
+          
+
+          
+
+        })
+        .catch(function(error){
+          console.log(error);
+        })
+
+
+
+      }
+
+
+
+      function moreInfo(self){
+        console.log("點擊", self.id);
+        axios({
+          url: "/",
+          method: "POST",
+          data:{
+            action: "moreInfo",
+            movieID: self.id
+          },
+          responseType: "text/json",
+        })
+        .then(function(response){
+
+          var searchBar = document.getElementById('searchBar');
+          searchBar.style.display = 'none';
+
+          var responseData = JSON.parse(response.data);
+          movieInfo = responseData.movieInfo;
+
+          //隱藏搜尋結果
+          searchResults = document.getElementById('searchResults');
+          searchResults.style.display = 'none';
+          var contentCaptionDis = document.getElementById('contentCaption');
+          contentCaptionDis.style.display = 'none';
+          var contentLittleCaptionDis = document.getElementById('contentLittleCaption');
+          contentLittleCaptionDis.style.display = 'none';
+
+
+          //顯示資訊卡片
+          moreInfoBlock.style.display = "flex";
+          var newImg = document.createElement('img');
+
+          //載入圖片
+          newImg.setAttribute("src", "../static/img.jpg");
+          newImg.setAttribute("class", "img-fluid rounded-start");
+          newImg.setAttribute('id', 'movieImg');
+          newImg.setAttribute("alt", "電影海報");
+          newImg.setAttribute("height", "600px");
+          var imgParent = document.getElementById('whereToPlaceTheImg');
+          imgParent.appendChild(newImg)
+
+          //更新資訊
+          document.getElementById("moreInfoMovieName").innerHTML = movieInfo[0];
+          document.getElementById('type').innerHTML = "類型" + movieInfo[1];
+          document.getElementById('duration').innerHTML = movieInfo[2];
+          document.getElementById('date').innerHTML = movieInfo[3];
+          document.getElementById('director').innerHTML = movieInfo[4];
+          document.getElementById('imdbScore').innerHTML = movieInfo[5];
+          document.getElementById('company').innerHTML = movieInfo[6];
+          document.getElementById('story').innerHTML = movieInfo[7];
+          
+
+
+        })
+        .catch(function(error){
+          console.log(error);
+        })
+      }
+
+
+
+
+    </script>
+
+    
+  </body>
+</html>

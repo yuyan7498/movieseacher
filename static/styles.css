@@ -1,0 +1,188 @@
+
+
+body{
+    place-items: center;
+}
+
+.header{
+    display: block;
+    background-image: url('../static/3000.jpeg');
+    background-attachment: fixed;
+    padding-top: 200px;
+    padding-bottom: 150px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    z-index: 1;
+}
+
+.header::after{
+    content: "";
+    clear: both;
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(129, 90, 193, 0.732);
+    top: 0%;
+    left: 0%;
+    z-index: -1;
+
+
+}
+
+.headerCaption h1{
+    font-size: 42px;
+    font-weight: 700;
+    color: white;
+    margin-top: 20px;
+}
+
+.headerCaption p{
+    font-size: 24px;
+    font-weight: 200;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.searchBar{
+    width: 100%;
+    position: relative;
+}
+
+.searchBar input{
+    width: 80%;
+    padding: 0px 30px;
+    border-radius: 50px;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    position: relative;
+    color: #333;
+    height: 70px;
+
+}
+
+
+.searchBar button{
+    position: absolute;
+    right: 12%;
+    height: 50px;
+    color: white;
+    background-color: rgb(157, 90, 193);
+    top: 10px;
+    border: none;
+    border-radius: 50px;
+    width: 50px;
+    transition: width 0.5s;
+
+}
+
+.searchBar button:hover{
+    width: 100px;
+}
+
+.searchBar button:active{
+    background-color: rgb(221, 182, 235);
+}
+
+.blank{
+    height: 50px;
+}
+
+
+
+.cards{
+    display: flex;
+    justify-content: center;
+    
+}
+
+.card1{
+    border-radius: 15px;
+    width: 60%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(157, 90, 193);
+    color: white;
+    text-align: center;
+    padding: 2em;
+    transition: .3s;
+    
+}
+
+.card1:hover{
+    background-color: rgb(170, 118, 199);
+    
+}
+
+.moviePic{
+    padding: 1em;
+}
+
+.movieInfo h3{
+    font-size: 2rem;
+    letter-spacing: 1;
+    padding: 1rem;
+}
+
+
+.movieInfo{
+    line-height: 10px;
+}
+
+.aboutMovie{
+    margin: 0;
+    font-size: 0.875rem;
+}
+
+@media screen and (min-width: 800px){
+
+    .movieCard{
+        flex-direction: row;
+    }
+    
+}
+
+.searchResult{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+.resultBox{
+    display: flex;
+    justify-content: start;
+    width: 70%;
+    margin: 10px;
+    padding: 17px 10px 10px 10px;
+    box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.25);
+    background-color: rgba(148, 106, 170, 0.63);
+    transition: 0.5s ease-in-out;
+    border-radius: 10px;
+    color: white;
+    border: none;
+
+}
+
+.resultBox h3{
+    text-align: center;
+    font-size: 24px;
+    font-weight: 200;
+}
+
+.resultBox:hover{
+    background-color: rgb(134, 137, 189);
+}
+
+
+.moreInfo{
+    display: flex;
+    justify-content: center;
+}
+
+.card-body p{
+    margin: 5px;
+}
